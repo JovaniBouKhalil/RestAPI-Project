@@ -1,0 +1,1266 @@
+{
+  "info": {
+    "name": "Assignment 6 - Notes REST API",
+    "description": "Run all requests in order. The create request stores noteId automatically. Tests cover all CRUD routes and error paths; the final requests remove the created note. Change baseUrl if PORT changes.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "noteId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 - API entry point",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": []
+        },
+        "description": "01 - API entry point"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"JSON response\", function () { if (!pm.response.headers.get(\"Content-Type\").includes(\"application/json\")) throw new Error(\"Expected JSON\"); });"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "200 OK",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"name\": \"Assignment 6 Notes API\",\n  \"notes\": \"/api/notes\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "02 - List notes",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/notes",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "notes"
+          ]
+        },
+        "description": "02 - List notes"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"JSON response\", function () { if (!pm.response.headers.get(\"Content-Type\").includes(\"application/json\")) throw new Error(\"Expected JSON\"); });",
+              "pm.test(\"Notes are an array\", function () { if (!Array.isArray(pm.response.json())) throw new Error(\"Expected an array\"); });"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "200 OK",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "[]"
+        }
+      ]
+    },
+    {
+      "name": "03 - Create a note and save noteId",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/notes",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "notes"
+          ]
+        },
+        "description": "03 - Create a note and save noteId",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Assignment 6 REST notes\",\n  \"body\": \"Review Express and MongoDB.\",\n  \"tags\": [\n    \"study\",\n    \"api\"\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });",
+              "pm.test(\"JSON response\", function () { if (!pm.response.headers.get(\"Content-Type\").includes(\"application/json\")) throw new Error(\"Expected JSON\"); });",
+              "pm.test(\"Server-generated identity and timestamps\", function () { const note = pm.response.json(); if (!/^[a-f0-9]{24}$/.test(note._id) || !note.createdAt || !note.updatedAt) throw new Error(\"Missing metadata\"); pm.collectionVariables.set(\"noteId\", note._id); });",
+              "pm.test(\"Created resource location\", function () { if (pm.response.headers.get(\"Location\") !== \"/api/notes/\" + pm.collectionVariables.get(\"noteId\")) throw new Error(\"Wrong Location\"); });"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "201 Created",
+          "status": "Created",
+          "code": 201,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"_id\": \"66f1c2e4b7a1d3f0c8e2a9b1\",\n  \"title\": \"Assignment 6 REST notes\",\n  \"body\": \"Review Express and MongoDB.\",\n  \"tags\": [\n    \"study\",\n    \"api\"\n  ],\n  \"createdAt\": \"2026-11-09T17:00:00.000Z\",\n  \"updatedAt\": \"2026-11-09T17:00:00.000Z\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "04 - Get the created note",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/notes/{{noteId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "notes",
+            "{{noteId}}"
+          ]
+        },
+        "description": "04 - Get the created note"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"JSON response\", function () { if (!pm.response.headers.get(\"Content-Type\").includes(\"application/json\")) throw new Error(\"Expected JSON\"); });",
+              "pm.test(\"Correct note\", function () { if (pm.response.json()._id !== pm.collectionVariables.get(\"noteId\")) throw new Error(\"Wrong note\"); });"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "200 OK",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"_id\": \"66f1c2e4b7a1d3f0c8e2a9b1\",\n  \"title\": \"Assignment 6 REST notes\",\n  \"body\": \"Review Express and MongoDB.\",\n  \"tags\": [\n    \"study\",\n    \"api\"\n  ],\n  \"createdAt\": \"2026-11-09T17:00:00.000Z\",\n  \"updatedAt\": \"2026-11-09T17:00:00.000Z\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "05 - Search, sort, and limit",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/notes?search=REST&sort=newest&limit=10",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "notes"
+          ],
+          "query": [
+            {
+              "key": "search",
+              "value": "REST"
+            },
+            {
+              "key": "sort",
+              "value": "newest"
+            },
+            {
+              "key": "limit",
+              "value": "10"
+            }
+          ]
+        },
+        "description": "05 - Search, sort, and limit"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"JSON response\", function () { if (!pm.response.headers.get(\"Content-Type\").includes(\"application/json\")) throw new Error(\"Expected JSON\"); });",
+              "pm.test(\"Search includes the note\", function () { if (!pm.response.json().some(note => note._id === pm.collectionVariables.get(\"noteId\"))) throw new Error(\"Note missing from search\"); });"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "200 OK",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "[\n  {\n    \"_id\": \"66f1c2e4b7a1d3f0c8e2a9b1\",\n    \"title\": \"Assignment 6 REST notes\",\n    \"body\": \"Review Express and MongoDB.\",\n    \"tags\": [\n      \"study\",\n      \"api\"\n    ],\n    \"createdAt\": \"2026-11-09T17:00:00.000Z\",\n    \"updatedAt\": \"2026-11-09T17:00:00.000Z\"\n  }\n]"
+        }
+      ]
+    },
+    {
+      "name": "06 - Replace a note with PUT",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/notes/{{noteId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "notes",
+            "{{noteId}}"
+          ]
+        },
+        "description": "06 - Replace a note with PUT",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Updated study notes\",\n  \"body\": \"Revise validation.\",\n  \"tags\": [\n    \"revision\"\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"JSON response\", function () { if (!pm.response.headers.get(\"Content-Type\").includes(\"application/json\")) throw new Error(\"Expected JSON\"); });",
+              "pm.test(\"Replacement saved\", function () { if (pm.response.json().title !== \"Updated study notes\" || pm.response.json().body !== \"Revise validation.\") throw new Error(\"Replacement not saved\"); });"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "200 OK",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"_id\": \"66f1c2e4b7a1d3f0c8e2a9b1\",\n  \"title\": \"Updated study notes\",\n  \"body\": \"Revise validation.\",\n  \"tags\": [\n    \"revision\"\n  ],\n  \"createdAt\": \"2026-11-09T17:00:00.000Z\",\n  \"updatedAt\": \"2026-11-09T17:00:00.000Z\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "07 - Update only body with PATCH",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/notes/{{noteId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "notes",
+            "{{noteId}}"
+          ]
+        },
+        "description": "07 - Update only body with PATCH",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"body\": \"Ready to submit.\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"JSON response\", function () { if (!pm.response.headers.get(\"Content-Type\").includes(\"application/json\")) throw new Error(\"Expected JSON\"); });",
+              "pm.test(\"Unsent fields preserved\", function () { const note=pm.response.json(); if (note.title !== \"Updated study notes\" || note.tags[0] !== \"revision\" || note.body !== \"Ready to submit.\") throw new Error(\"Partial update failed\"); });"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "200 OK",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"_id\": \"66f1c2e4b7a1d3f0c8e2a9b1\",\n  \"title\": \"Updated study notes\",\n  \"body\": \"Ready to submit.\",\n  \"tags\": [\n    \"revision\"\n  ],\n  \"createdAt\": \"2026-11-09T17:00:00.000Z\",\n  \"updatedAt\": \"2026-11-09T17:00:00.000Z\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "08 - Read the updated note",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/notes/{{noteId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "notes",
+            "{{noteId}}"
+          ]
+        },
+        "description": "08 - Read the updated note"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"JSON response\", function () { if (!pm.response.headers.get(\"Content-Type\").includes(\"application/json\")) throw new Error(\"Expected JSON\"); });",
+              "pm.test(\"Updated data retrieved\", function () { if (pm.response.json().body !== \"Ready to submit.\") throw new Error(\"Update missing\"); });"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "200 OK",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"_id\": \"66f1c2e4b7a1d3f0c8e2a9b1\",\n  \"title\": \"Updated study notes\",\n  \"body\": \"Ready to submit.\",\n  \"tags\": [\n    \"revision\"\n  ],\n  \"createdAt\": \"2026-11-09T17:00:00.000Z\",\n  \"updatedAt\": \"2026-11-09T17:00:00.000Z\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "09 - Reject missing title on create",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/notes",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "notes"
+          ]
+        },
+        "description": "09 - Reject missing title on create",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"body\": \"Missing title\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", function () { pm.response.to.have.status(400); });",
+              "pm.test(\"JSON response\", function () { if (!pm.response.headers.get(\"Content-Type\").includes(\"application/json\")) throw new Error(\"Expected JSON\"); });",
+              "pm.test(\"Readable error message\", function () { if (typeof pm.response.json().error !== \"string\") throw new Error(\"Missing error message\"); });"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "400 Bad Request",
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": \"Validation failed.\",\n  \"details\": {\n    \"title\": \"title is required and must be a non-empty string.\"\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "10 - Reject missing title on PUT",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/notes/{{noteId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "notes",
+            "{{noteId}}"
+          ]
+        },
+        "description": "10 - Reject missing title on PUT",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"body\": \"Missing title\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", function () { pm.response.to.have.status(400); });",
+              "pm.test(\"JSON response\", function () { if (!pm.response.headers.get(\"Content-Type\").includes(\"application/json\")) throw new Error(\"Expected JSON\"); });",
+              "pm.test(\"Readable error message\", function () { if (typeof pm.response.json().error !== \"string\") throw new Error(\"Missing error message\"); });"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "400 Bad Request",
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": \"Validation failed.\",\n  \"details\": {\n    \"title\": \"title is required and must be a non-empty string.\"\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "11 - Reject invalid tags on PATCH",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/notes/{{noteId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "notes",
+            "{{noteId}}"
+          ]
+        },
+        "description": "11 - Reject invalid tags on PATCH",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"tags\": \"not an array\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", function () { pm.response.to.have.status(400); });",
+              "pm.test(\"JSON response\", function () { if (!pm.response.headers.get(\"Content-Type\").includes(\"application/json\")) throw new Error(\"Expected JSON\"); });",
+              "pm.test(\"Readable error message\", function () { if (typeof pm.response.json().error !== \"string\") throw new Error(\"Missing error message\"); });"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "400 Bad Request",
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": \"Validation failed.\",\n  \"details\": {\n    \"tags\": \"tags must be an array of at most 10 non-empty strings of up to 30 characters.\"\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "12 - Reject malformed JSON",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/notes",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "notes"
+          ]
+        },
+        "description": "12 - Reject malformed JSON",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"title\":",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", function () { pm.response.to.have.status(400); });",
+              "pm.test(\"JSON response\", function () { if (!pm.response.headers.get(\"Content-Type\").includes(\"application/json\")) throw new Error(\"Expected JSON\"); });",
+              "pm.test(\"Readable error message\", function () { if (typeof pm.response.json().error !== \"string\") throw new Error(\"Missing error message\"); });"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "400 Bad Request",
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": \"Malformed JSON. Send a valid JSON object.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "13 - Reject a malformed ObjectId",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/notes/not-an-id",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "notes",
+            "not-an-id"
+          ]
+        },
+        "description": "13 - Reject a malformed ObjectId"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", function () { pm.response.to.have.status(400); });",
+              "pm.test(\"JSON response\", function () { if (!pm.response.headers.get(\"Content-Type\").includes(\"application/json\")) throw new Error(\"Expected JSON\"); });",
+              "pm.test(\"Readable error message\", function () { if (typeof pm.response.json().error !== \"string\") throw new Error(\"Missing error message\"); });"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "400 Bad Request",
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": \"id must be a 24-character hexadecimal MongoDB ObjectId.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "14 - Missing note on GET",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/notes/000000000000000000000001",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "notes",
+            "000000000000000000000001"
+          ]
+        },
+        "description": "14 - Missing note on GET"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", function () { pm.response.to.have.status(404); });",
+              "pm.test(\"JSON response\", function () { if (!pm.response.headers.get(\"Content-Type\").includes(\"application/json\")) throw new Error(\"Expected JSON\"); });",
+              "pm.test(\"Readable error message\", function () { if (typeof pm.response.json().error !== \"string\") throw new Error(\"Missing error message\"); });"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "404 Not Found",
+          "status": "Not Found",
+          "code": 404,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": \"Note not found.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "15 - Missing note on PUT",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/notes/000000000000000000000001",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "notes",
+            "000000000000000000000001"
+          ]
+        },
+        "description": "15 - Missing note on PUT",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Valid replacement\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", function () { pm.response.to.have.status(404); });",
+              "pm.test(\"JSON response\", function () { if (!pm.response.headers.get(\"Content-Type\").includes(\"application/json\")) throw new Error(\"Expected JSON\"); });",
+              "pm.test(\"Readable error message\", function () { if (typeof pm.response.json().error !== \"string\") throw new Error(\"Missing error message\"); });"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "404 Not Found",
+          "status": "Not Found",
+          "code": 404,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": \"Note not found.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "16 - Missing note on PATCH",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/notes/000000000000000000000001",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "notes",
+            "000000000000000000000001"
+          ]
+        },
+        "description": "16 - Missing note on PATCH",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"body\": \"Valid update\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", function () { pm.response.to.have.status(404); });",
+              "pm.test(\"JSON response\", function () { if (!pm.response.headers.get(\"Content-Type\").includes(\"application/json\")) throw new Error(\"Expected JSON\"); });",
+              "pm.test(\"Readable error message\", function () { if (typeof pm.response.json().error !== \"string\") throw new Error(\"Missing error message\"); });"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "404 Not Found",
+          "status": "Not Found",
+          "code": 404,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": \"Note not found.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "17 - Missing note on DELETE",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/notes/000000000000000000000001",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "notes",
+            "000000000000000000000001"
+          ]
+        },
+        "description": "17 - Missing note on DELETE"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", function () { pm.response.to.have.status(404); });",
+              "pm.test(\"JSON response\", function () { if (!pm.response.headers.get(\"Content-Type\").includes(\"application/json\")) throw new Error(\"Expected JSON\"); });",
+              "pm.test(\"Readable error message\", function () { if (typeof pm.response.json().error !== \"string\") throw new Error(\"Missing error message\"); });"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "404 Not Found",
+          "status": "Not Found",
+          "code": 404,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": \"Note not found.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "18 - Reject invalid query",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/notes?limit=0",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "notes"
+          ],
+          "query": [
+            {
+              "key": "limit",
+              "value": "0"
+            }
+          ]
+        },
+        "description": "18 - Reject invalid query"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", function () { pm.response.to.have.status(400); });",
+              "pm.test(\"JSON response\", function () { if (!pm.response.headers.get(\"Content-Type\").includes(\"application/json\")) throw new Error(\"Expected JSON\"); });",
+              "pm.test(\"Readable error message\", function () { if (typeof pm.response.json().error !== \"string\") throw new Error(\"Missing error message\"); });"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "400 Bad Request",
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": \"limit must be an integer from 1 to 100.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "19 - Unknown route",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/unknown",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "unknown"
+          ]
+        },
+        "description": "19 - Unknown route"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", function () { pm.response.to.have.status(404); });",
+              "pm.test(\"JSON response\", function () { if (!pm.response.headers.get(\"Content-Type\").includes(\"application/json\")) throw new Error(\"Expected JSON\"); });",
+              "pm.test(\"Readable error message\", function () { if (typeof pm.response.json().error !== \"string\") throw new Error(\"Missing error message\"); });"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "404 Not Found",
+          "status": "Not Found",
+          "code": 404,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": \"Route not found.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "20 - Reject non-JSON content type",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "text/plain"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/notes",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "notes"
+          ]
+        },
+        "description": "20 - Reject non-JSON content type",
+        "body": {
+          "mode": "raw",
+          "raw": "title=Invalid",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 415\", function () { pm.response.to.have.status(415); });",
+              "pm.test(\"JSON response\", function () { if (!pm.response.headers.get(\"Content-Type\").includes(\"application/json\")) throw new Error(\"Expected JSON\"); });",
+              "pm.test(\"Readable error message\", function () { if (typeof pm.response.json().error !== \"string\") throw new Error(\"Missing error message\"); });"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "415 Unsupported Media Type",
+          "status": "Unsupported Media Type",
+          "code": 415,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": \"Content-Type must be application/json.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "21 - Delete the created note",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/notes/{{noteId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "notes",
+            "{{noteId}}"
+          ]
+        },
+        "description": "21 - Delete the created note"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 204\", function () { pm.response.to.have.status(204); });",
+              "pm.test(\"204 has no body\", function () { if (pm.response.text() !== \"\") throw new Error(\"204 must be empty\"); });"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "204 No Content",
+          "status": "No Content",
+          "code": 204,
+          "header": [],
+          "body": ""
+        }
+      ]
+    },
+    {
+      "name": "22 - Deleted note is missing",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/notes/{{noteId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "notes",
+            "{{noteId}}"
+          ]
+        },
+        "description": "22 - Deleted note is missing"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", function () { pm.response.to.have.status(404); });",
+              "pm.test(\"JSON response\", function () { if (!pm.response.headers.get(\"Content-Type\").includes(\"application/json\")) throw new Error(\"Expected JSON\"); });",
+              "pm.test(\"Readable error message\", function () { if (typeof pm.response.json().error !== \"string\") throw new Error(\"Missing error message\"); });"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "404 Not Found",
+          "status": "Not Found",
+          "code": 404,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": \"Note not found.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "23 - Repeated delete returns 404",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/notes/{{noteId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "notes",
+            "{{noteId}}"
+          ]
+        },
+        "description": "23 - Repeated delete returns 404"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", function () { pm.response.to.have.status(404); });",
+              "pm.test(\"JSON response\", function () { if (!pm.response.headers.get(\"Content-Type\").includes(\"application/json\")) throw new Error(\"Expected JSON\"); });",
+              "pm.test(\"Readable error message\", function () { if (typeof pm.response.json().error !== \"string\") throw new Error(\"Missing error message\"); });"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "404 Not Found",
+          "status": "Not Found",
+          "code": 404,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": \"Note not found.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "24 - Final list excludes the deleted note",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/notes",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "notes"
+          ]
+        },
+        "description": "24 - Final list excludes the deleted note"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"JSON response\", function () { if (!pm.response.headers.get(\"Content-Type\").includes(\"application/json\")) throw new Error(\"Expected JSON\"); });",
+              "pm.test(\"Deleted note removed from list\", function () { if (pm.response.json().some(note => note._id === pm.collectionVariables.get(\"noteId\"))) throw new Error(\"Deleted note still present\"); });"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "200 OK",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "[]"
+        }
+      ]
+    }
+  ]
+}

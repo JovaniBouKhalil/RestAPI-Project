@@ -1,0 +1,804 @@
+TAP version 13
+# 2026-11-09T17:46:06.053Z GET /
+# 2026-11-09T17:46:06.070Z GET /api/notes
+# Subtest: Notes API against real, disk-backed MongoDB
+    # Subtest: root describes the API and an empty list returns 200 and []
+    ok 1 - root describes the API and an empty list returns 200 and []
+      ---
+      duration_ms: 88.5262
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.088Z POST /api/notes
+    # Subtest: POST returns 201, a Location header, server metadata, and a stored MongoDB document
+    ok 2 - POST returns 201, a Location header, server metadata, and a stored MongoDB document
+      ---
+      duration_ms: 47.4894
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.132Z POST /api/notes
+# 2026-11-09T17:46:06.138Z GET /api/notes
+# 2026-11-09T17:46:06.146Z GET /api/notes/6af206decb659d61a79fe5b1
+    # Subtest: GET list and GET one return the created note with 200
+    ok 3 - GET list and GET one return the created note with 200
+      ---
+      duration_ms: 25.3384
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.157Z POST /api/notes
+# 2026-11-09T17:46:06.162Z PUT /api/notes/6af206decb659d61a79fe5b6
+# 2026-11-09T17:46:06.173Z GET /api/notes/6af206decb659d61a79fe5b6
+# 2026-11-09T17:46:06.181Z PUT /api/notes/6af206decb659d61a79fe5b6
+    # Subtest: PUT replaces writable fields, resets omitted fields, and preserves identity and creation time
+    ok 4 - PUT replaces writable fields, resets omitted fields, and preserves identity and creation time
+      ---
+      duration_ms: 32.5443
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.188Z POST /api/notes
+# 2026-11-09T17:46:06.192Z PATCH /api/notes/6af206decb659d61a79fe5bc
+    # Subtest: PATCH changes supplied fields and preserves the rest
+    ok 5 - PATCH changes supplied fields and preserves the rest
+      ---
+      duration_ms: 10.4888
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.198Z POST /api/notes
+# 2026-11-09T17:46:06.201Z PATCH /api/notes/6af206decb659d61a79fe5c1
+    # Subtest: PATCH can clear optional fields with an empty string and array
+    ok 6 - PATCH can clear optional fields with an empty string and array
+      ---
+      duration_ms: 8.3053
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.206Z POST /api/notes
+# 2026-11-09T17:46:06.209Z DELETE /api/notes/6af206decb659d61a79fe5c5
+# 2026-11-09T17:46:06.213Z DELETE /api/notes/6af206decb659d61a79fe5c5
+    # Subtest: DELETE returns an empty 204 and removes the database document
+    ok 7 - DELETE returns an empty 204 and removes the database document
+      ---
+      duration_ms: 11.5782
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.218Z GET /api/notes/000000000000000000000001
+    # Subtest: GET returns 404 for a valid but missing ObjectId
+    ok 8 - GET returns 404 for a valid but missing ObjectId
+      ---
+      duration_ms: 4.6924
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.222Z GET /api/notes/not-an-id
+    # Subtest: GET returns 400 for a malformed ObjectId
+    ok 9 - GET returns 400 for a malformed ObjectId
+      ---
+      duration_ms: 2.7459
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.225Z PUT /api/notes/000000000000000000000001
+    # Subtest: PUT returns 404 for a valid but missing ObjectId
+    ok 10 - PUT returns 404 for a valid but missing ObjectId
+      ---
+      duration_ms: 4.2854
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.230Z PUT /api/notes/not-an-id
+    # Subtest: PUT returns 400 for a malformed ObjectId
+    ok 11 - PUT returns 400 for a malformed ObjectId
+      ---
+      duration_ms: 2.7415
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.233Z PATCH /api/notes/000000000000000000000001
+    # Subtest: PATCH returns 404 for a valid but missing ObjectId
+    ok 12 - PATCH returns 404 for a valid but missing ObjectId
+      ---
+      duration_ms: 5.4616
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.238Z PATCH /api/notes/not-an-id
+    # Subtest: PATCH returns 400 for a malformed ObjectId
+    ok 13 - PATCH returns 400 for a malformed ObjectId
+      ---
+      duration_ms: 2.7655
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.241Z DELETE /api/notes/000000000000000000000001
+    # Subtest: DELETE returns 404 for a valid but missing ObjectId
+    ok 14 - DELETE returns 404 for a valid but missing ObjectId
+      ---
+      duration_ms: 3.984
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.245Z DELETE /api/notes/not-an-id
+    # Subtest: DELETE returns 400 for a malformed ObjectId
+    ok 15 - DELETE returns 400 for a malformed ObjectId
+      ---
+      duration_ms: 2.5749
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.248Z POST /api/notes
+    # Subtest: POST rejects blank title without changing stored data
+    ok 16 - POST rejects blank title without changing stored data
+      ---
+      duration_ms: 6.6465
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.254Z POST /api/notes
+    # Subtest: POST rejects numeric title without changing stored data
+    ok 17 - POST rejects numeric title without changing stored data
+      ---
+      duration_ms: 4.3326
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.258Z POST /api/notes
+    # Subtest: POST rejects null title without changing stored data
+    ok 18 - POST rejects null title without changing stored data
+      ---
+      duration_ms: 4.4526
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.263Z POST /api/notes
+    # Subtest: POST rejects object title without changing stored data
+    ok 19 - POST rejects object title without changing stored data
+      ---
+      duration_ms: 4.5881
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.268Z POST /api/notes
+    # Subtest: POST rejects long title without changing stored data
+    ok 20 - POST rejects long title without changing stored data
+      ---
+      duration_ms: 4.8025
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.273Z POST /api/notes
+    # Subtest: POST rejects numeric body without changing stored data
+    ok 21 - POST rejects numeric body without changing stored data
+      ---
+      duration_ms: 4.59
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.277Z POST /api/notes
+    # Subtest: POST rejects null body without changing stored data
+    ok 22 - POST rejects null body without changing stored data
+      ---
+      duration_ms: 4.3015
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.282Z POST /api/notes
+    # Subtest: POST rejects long body without changing stored data
+    ok 23 - POST rejects long body without changing stored data
+      ---
+      duration_ms: 5.4977
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.287Z POST /api/notes
+    # Subtest: POST rejects tags string without changing stored data
+    ok 24 - POST rejects tags string without changing stored data
+      ---
+      duration_ms: 4.8358
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.292Z POST /api/notes
+    # Subtest: POST rejects null tags without changing stored data
+    ok 25 - POST rejects null tags without changing stored data
+      ---
+      duration_ms: 4.3884
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.297Z POST /api/notes
+    # Subtest: POST rejects empty tag without changing stored data
+    ok 26 - POST rejects empty tag without changing stored data
+      ---
+      duration_ms: 5.0631
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.303Z POST /api/notes
+    # Subtest: POST rejects numeric tag without changing stored data
+    ok 27 - POST rejects numeric tag without changing stored data
+      ---
+      duration_ms: 5.3631
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.307Z POST /api/notes
+    # Subtest: POST rejects long tag without changing stored data
+    ok 28 - POST rejects long tag without changing stored data
+      ---
+      duration_ms: 4.2113
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.311Z POST /api/notes
+    # Subtest: POST rejects too many tags without changing stored data
+    ok 29 - POST rejects too many tags without changing stored data
+      ---
+      duration_ms: 9.2436
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.321Z POST /api/notes
+    # Subtest: POST rejects unknown field without changing stored data
+    ok 30 - POST rejects unknown field without changing stored data
+      ---
+      duration_ms: 5.3103
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.326Z POST /api/notes
+    # Subtest: POST rejects client ID without changing stored data
+    ok 31 - POST rejects client ID without changing stored data
+      ---
+      duration_ms: 4.355
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.330Z POST /api/notes
+    # Subtest: POST rejects client timestamp without changing stored data
+    ok 32 - POST rejects client timestamp without changing stored data
+      ---
+      duration_ms: 4.8091
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.336Z POST /api/notes
+    # Subtest: POST rejects update operator without changing stored data
+    ok 33 - POST rejects update operator without changing stored data
+      ---
+      duration_ms: 5.3723
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.341Z POST /api/notes
+# 2026-11-09T17:46:06.343Z PUT /api/notes/6af206decb659d61a79fe5fb
+# 2026-11-09T17:46:06.344Z GET /api/notes/6af206decb659d61a79fe5fb
+    # Subtest: PUT rejects blank title without changing stored data
+    ok 34 - PUT rejects blank title without changing stored data
+      ---
+      duration_ms: 8.0938
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.349Z POST /api/notes
+# 2026-11-09T17:46:06.353Z PUT /api/notes/6af206decb659d61a79fe5ff
+# 2026-11-09T17:46:06.354Z GET /api/notes/6af206decb659d61a79fe5ff
+    # Subtest: PUT rejects numeric title without changing stored data
+    ok 35 - PUT rejects numeric title without changing stored data
+      ---
+      duration_ms: 9.5405
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.358Z POST /api/notes
+# 2026-11-09T17:46:06.362Z PUT /api/notes/6af206decb659d61a79fe603
+# 2026-11-09T17:46:06.364Z GET /api/notes/6af206decb659d61a79fe603
+    # Subtest: PUT rejects null title without changing stored data
+    ok 36 - PUT rejects null title without changing stored data
+      ---
+      duration_ms: 10.04
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.369Z POST /api/notes
+# 2026-11-09T17:46:06.373Z PUT /api/notes/6af206decb659d61a79fe607
+# 2026-11-09T17:46:06.374Z GET /api/notes/6af206decb659d61a79fe607
+    # Subtest: PUT rejects object title without changing stored data
+    ok 37 - PUT rejects object title without changing stored data
+      ---
+      duration_ms: 9.6559
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.378Z POST /api/notes
+# 2026-11-09T17:46:06.381Z PUT /api/notes/6af206decb659d61a79fe60b
+# 2026-11-09T17:46:06.383Z GET /api/notes/6af206decb659d61a79fe60b
+    # Subtest: PUT rejects long title without changing stored data
+    ok 38 - PUT rejects long title without changing stored data
+      ---
+      duration_ms: 9.9381
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.388Z POST /api/notes
+# 2026-11-09T17:46:06.391Z PUT /api/notes/6af206decb659d61a79fe60f
+# 2026-11-09T17:46:06.392Z GET /api/notes/6af206decb659d61a79fe60f
+    # Subtest: PUT rejects numeric body without changing stored data
+    ok 39 - PUT rejects numeric body without changing stored data
+      ---
+      duration_ms: 7.545
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.395Z POST /api/notes
+# 2026-11-09T17:46:06.399Z PUT /api/notes/6af206decb659d61a79fe613
+# 2026-11-09T17:46:06.400Z GET /api/notes/6af206decb659d61a79fe613
+    # Subtest: PUT rejects null body without changing stored data
+    ok 40 - PUT rejects null body without changing stored data
+      ---
+      duration_ms: 8.5044
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.404Z POST /api/notes
+# 2026-11-09T17:46:06.407Z PUT /api/notes/6af206decb659d61a79fe617
+# 2026-11-09T17:46:06.407Z GET /api/notes/6af206decb659d61a79fe617
+    # Subtest: PUT rejects long body without changing stored data
+    ok 41 - PUT rejects long body without changing stored data
+      ---
+      duration_ms: 7.1642
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.411Z POST /api/notes
+# 2026-11-09T17:46:06.413Z PUT /api/notes/6af206decb659d61a79fe61b
+# 2026-11-09T17:46:06.414Z GET /api/notes/6af206decb659d61a79fe61b
+    # Subtest: PUT rejects tags string without changing stored data
+    ok 42 - PUT rejects tags string without changing stored data
+      ---
+      duration_ms: 7.1211
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.419Z POST /api/notes
+# 2026-11-09T17:46:06.421Z PUT /api/notes/6af206decb659d61a79fe61f
+# 2026-11-09T17:46:06.422Z GET /api/notes/6af206decb659d61a79fe61f
+    # Subtest: PUT rejects null tags without changing stored data
+    ok 43 - PUT rejects null tags without changing stored data
+      ---
+      duration_ms: 7.5162
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.426Z POST /api/notes
+# 2026-11-09T17:46:06.429Z PUT /api/notes/6af206decb659d61a79fe623
+# 2026-11-09T17:46:06.430Z GET /api/notes/6af206decb659d61a79fe623
+    # Subtest: PUT rejects empty tag without changing stored data
+    ok 44 - PUT rejects empty tag without changing stored data
+      ---
+      duration_ms: 8.4119
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.436Z POST /api/notes
+# 2026-11-09T17:46:06.440Z PUT /api/notes/6af206decb659d61a79fe627
+# 2026-11-09T17:46:06.441Z GET /api/notes/6af206decb659d61a79fe627
+    # Subtest: PUT rejects numeric tag without changing stored data
+    ok 45 - PUT rejects numeric tag without changing stored data
+      ---
+      duration_ms: 11.5316
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.447Z POST /api/notes
+# 2026-11-09T17:46:06.452Z PUT /api/notes/6af206decb659d61a79fe62b
+# 2026-11-09T17:46:06.454Z GET /api/notes/6af206decb659d61a79fe62b
+    # Subtest: PUT rejects long tag without changing stored data
+    ok 46 - PUT rejects long tag without changing stored data
+      ---
+      duration_ms: 12.3246
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.459Z POST /api/notes
+# 2026-11-09T17:46:06.463Z PUT /api/notes/6af206decb659d61a79fe62f
+# 2026-11-09T17:46:06.465Z GET /api/notes/6af206decb659d61a79fe62f
+    # Subtest: PUT rejects too many tags without changing stored data
+    ok 47 - PUT rejects too many tags without changing stored data
+      ---
+      duration_ms: 12.3188
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.472Z POST /api/notes
+# 2026-11-09T17:46:06.477Z PUT /api/notes/6af206decb659d61a79fe633
+# 2026-11-09T17:46:06.478Z GET /api/notes/6af206decb659d61a79fe633
+    # Subtest: PUT rejects unknown field without changing stored data
+    ok 48 - PUT rejects unknown field without changing stored data
+      ---
+      duration_ms: 10.8104
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.482Z POST /api/notes
+# 2026-11-09T17:46:06.486Z PUT /api/notes/6af206decb659d61a79fe637
+# 2026-11-09T17:46:06.487Z GET /api/notes/6af206decb659d61a79fe637
+    # Subtest: PUT rejects client ID without changing stored data
+    ok 49 - PUT rejects client ID without changing stored data
+      ---
+      duration_ms: 10.6788
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.494Z POST /api/notes
+# 2026-11-09T17:46:06.504Z PUT /api/notes/6af206decb659d61a79fe63b
+# 2026-11-09T17:46:06.505Z GET /api/notes/6af206decb659d61a79fe63b
+    # Subtest: PUT rejects client timestamp without changing stored data
+    ok 50 - PUT rejects client timestamp without changing stored data
+      ---
+      duration_ms: 16.5861
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.509Z POST /api/notes
+# 2026-11-09T17:46:06.512Z PUT /api/notes/6af206decb659d61a79fe63f
+# 2026-11-09T17:46:06.513Z GET /api/notes/6af206decb659d61a79fe63f
+    # Subtest: PUT rejects update operator without changing stored data
+    ok 51 - PUT rejects update operator without changing stored data
+      ---
+      duration_ms: 7.3307
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.517Z POST /api/notes
+# 2026-11-09T17:46:06.520Z PATCH /api/notes/6af206decb659d61a79fe643
+# 2026-11-09T17:46:06.521Z GET /api/notes/6af206decb659d61a79fe643
+    # Subtest: PATCH rejects blank title without changing stored data
+    ok 52 - PATCH rejects blank title without changing stored data
+      ---
+      duration_ms: 8.639
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.525Z POST /api/notes
+# 2026-11-09T17:46:06.528Z PATCH /api/notes/6af206decb659d61a79fe647
+# 2026-11-09T17:46:06.529Z GET /api/notes/6af206decb659d61a79fe647
+    # Subtest: PATCH rejects numeric title without changing stored data
+    ok 53 - PATCH rejects numeric title without changing stored data
+      ---
+      duration_ms: 8.1047
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.534Z POST /api/notes
+# 2026-11-09T17:46:06.536Z PATCH /api/notes/6af206decb659d61a79fe64b
+# 2026-11-09T17:46:06.537Z GET /api/notes/6af206decb659d61a79fe64b
+    # Subtest: PATCH rejects null title without changing stored data
+    ok 54 - PATCH rejects null title without changing stored data
+      ---
+      duration_ms: 7.8856
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.541Z POST /api/notes
+# 2026-11-09T17:46:06.544Z PATCH /api/notes/6af206decb659d61a79fe64f
+# 2026-11-09T17:46:06.545Z GET /api/notes/6af206decb659d61a79fe64f
+    # Subtest: PATCH rejects object title without changing stored data
+    ok 55 - PATCH rejects object title without changing stored data
+      ---
+      duration_ms: 7.5351
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.549Z POST /api/notes
+# 2026-11-09T17:46:06.553Z PATCH /api/notes/6af206decb659d61a79fe653
+# 2026-11-09T17:46:06.554Z GET /api/notes/6af206decb659d61a79fe653
+    # Subtest: PATCH rejects long title without changing stored data
+    ok 56 - PATCH rejects long title without changing stored data
+      ---
+      duration_ms: 8.4594
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.557Z POST /api/notes
+# 2026-11-09T17:46:06.560Z PATCH /api/notes/6af206decb659d61a79fe657
+# 2026-11-09T17:46:06.560Z GET /api/notes/6af206decb659d61a79fe657
+    # Subtest: PATCH rejects numeric body without changing stored data
+    ok 57 - PATCH rejects numeric body without changing stored data
+      ---
+      duration_ms: 6.6488
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.564Z POST /api/notes
+# 2026-11-09T17:46:06.567Z PATCH /api/notes/6af206decb659d61a79fe65b
+# 2026-11-09T17:46:06.568Z GET /api/notes/6af206decb659d61a79fe65b
+    # Subtest: PATCH rejects null body without changing stored data
+    ok 58 - PATCH rejects null body without changing stored data
+      ---
+      duration_ms: 7.3644
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.571Z POST /api/notes
+# 2026-11-09T17:46:06.574Z PATCH /api/notes/6af206decb659d61a79fe65f
+# 2026-11-09T17:46:06.575Z GET /api/notes/6af206decb659d61a79fe65f
+    # Subtest: PATCH rejects long body without changing stored data
+    ok 59 - PATCH rejects long body without changing stored data
+      ---
+      duration_ms: 7.2794
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.579Z POST /api/notes
+# 2026-11-09T17:46:06.582Z PATCH /api/notes/6af206decb659d61a79fe663
+# 2026-11-09T17:46:06.583Z GET /api/notes/6af206decb659d61a79fe663
+    # Subtest: PATCH rejects tags string without changing stored data
+    ok 60 - PATCH rejects tags string without changing stored data
+      ---
+      duration_ms: 7.8067
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.587Z POST /api/notes
+# 2026-11-09T17:46:06.589Z PATCH /api/notes/6af206decb659d61a79fe667
+# 2026-11-09T17:46:06.590Z GET /api/notes/6af206decb659d61a79fe667
+    # Subtest: PATCH rejects null tags without changing stored data
+    ok 61 - PATCH rejects null tags without changing stored data
+      ---
+      duration_ms: 6.8606
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.593Z POST /api/notes
+# 2026-11-09T17:46:06.596Z PATCH /api/notes/6af206decb659d61a79fe66b
+# 2026-11-09T17:46:06.596Z GET /api/notes/6af206decb659d61a79fe66b
+    # Subtest: PATCH rejects empty tag without changing stored data
+    ok 62 - PATCH rejects empty tag without changing stored data
+      ---
+      duration_ms: 6.6978
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.600Z POST /api/notes
+# 2026-11-09T17:46:06.603Z PATCH /api/notes/6af206decb659d61a79fe66f
+# 2026-11-09T17:46:06.604Z GET /api/notes/6af206decb659d61a79fe66f
+    # Subtest: PATCH rejects numeric tag without changing stored data
+    ok 63 - PATCH rejects numeric tag without changing stored data
+      ---
+      duration_ms: 6.9895
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.607Z POST /api/notes
+# 2026-11-09T17:46:06.609Z PATCH /api/notes/6af206decb659d61a79fe673
+# 2026-11-09T17:46:06.610Z GET /api/notes/6af206decb659d61a79fe673
+    # Subtest: PATCH rejects long tag without changing stored data
+    ok 64 - PATCH rejects long tag without changing stored data
+      ---
+      duration_ms: 6.6088
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.614Z POST /api/notes
+# 2026-11-09T17:46:06.617Z PATCH /api/notes/6af206decb659d61a79fe677
+# 2026-11-09T17:46:06.619Z GET /api/notes/6af206decb659d61a79fe677
+    # Subtest: PATCH rejects too many tags without changing stored data
+    ok 65 - PATCH rejects too many tags without changing stored data
+      ---
+      duration_ms: 8.3817
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.622Z POST /api/notes
+# 2026-11-09T17:46:06.625Z PATCH /api/notes/6af206decb659d61a79fe67b
+# 2026-11-09T17:46:06.626Z GET /api/notes/6af206decb659d61a79fe67b
+    # Subtest: PATCH rejects unknown field without changing stored data
+    ok 66 - PATCH rejects unknown field without changing stored data
+      ---
+      duration_ms: 6.8001
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.629Z POST /api/notes
+# 2026-11-09T17:46:06.632Z PATCH /api/notes/6af206decb659d61a79fe67f
+# 2026-11-09T17:46:06.633Z GET /api/notes/6af206decb659d61a79fe67f
+    # Subtest: PATCH rejects client ID without changing stored data
+    ok 67 - PATCH rejects client ID without changing stored data
+      ---
+      duration_ms: 8.3441
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.638Z POST /api/notes
+# 2026-11-09T17:46:06.640Z PATCH /api/notes/6af206decb659d61a79fe683
+# 2026-11-09T17:46:06.641Z GET /api/notes/6af206decb659d61a79fe683
+    # Subtest: PATCH rejects client timestamp without changing stored data
+    ok 68 - PATCH rejects client timestamp without changing stored data
+      ---
+      duration_ms: 7.1171
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.651Z POST /api/notes
+# 2026-11-09T17:46:06.654Z PATCH /api/notes/6af206decb659d61a79fe687
+# 2026-11-09T17:46:06.655Z GET /api/notes/6af206decb659d61a79fe687
+    # Subtest: PATCH rejects update operator without changing stored data
+    ok 69 - PATCH rejects update operator without changing stored data
+      ---
+      duration_ms: 14.3562
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.659Z POST /api/notes
+# 2026-11-09T17:46:06.661Z POST /api/notes
+# 2026-11-09T17:46:06.663Z PUT /api/notes/6af206decb659d61a79fe68b
+# 2026-11-09T17:46:06.665Z PATCH /api/notes/6af206decb659d61a79fe68b
+    # Subtest: POST and PUT require a title; an empty PATCH is rejected
+    ok 70 - POST and PUT require a title; an empty PATCH is rejected
+      ---
+      duration_ms: 8.6535
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.669Z POST /api/notes
+    # Subtest: maximum allowed field lengths are accepted
+    ok 71 - maximum allowed field lengths are accepted
+      ---
+      duration_ms: 6.3471
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.675Z POST /api/notes
+    # Subtest: non-object JSON body "null" returns 400
+    ok 72 - non-object JSON body "null" returns 400
+      ---
+      duration_ms: 3.2108
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.678Z POST /api/notes
+    # Subtest: non-object JSON body "[]" returns 400
+    ok 73 - non-object JSON body "[]" returns 400
+      ---
+      duration_ms: 3.3344
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.681Z POST /api/notes
+    # Subtest: non-object JSON body "42" returns 400
+    ok 74 - non-object JSON body "42" returns 400
+      ---
+      duration_ms: 3.2863
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.685Z POST /api/notes
+    # Subtest: non-object JSON body "\\"text\\"" returns 400
+    ok 75 - non-object JSON body "\\"text\\"" returns 400
+      ---
+      duration_ms: 3.3594
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.687Z POST /api/notes
+    # Subtest: non-object JSON body "true" returns 400
+    ok 76 - non-object JSON body "true" returns 400
+      ---
+      duration_ms: 2.458
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.690Z POST /api/notes
+    # Subtest: non-object JSON body "" returns 400
+    ok 77 - non-object JSON body "" returns 400
+      ---
+      duration_ms: 2.622
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.693Z POST /api/notes
+# 2026-11-09T17:46:06.695Z GET /api/notes
+    # Subtest: malformed JSON returns JSON 400 and the next request still works
+    ok 78 - malformed JSON returns JSON 400 and the next request still works
+      ---
+      duration_ms: 5.6533
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.700Z POST /api/notes
+# 2026-11-09T17:46:06.702Z GET /api/notes
+    # Subtest: oversized JSON returns 413 and the server stays available
+    ok 79 - oversized JSON returns 413 and the server stays available
+      ---
+      duration_ms: 7.6867
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.706Z POST /api/notes
+    # Subtest: a write without application/json returns JSON 415
+    ok 80 - a write without application/json returns JSON 415
+      ---
+      duration_ms: 2.5836
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.708Z GET /api/unknown
+    # Subtest: unknown routes return JSON 404
+    ok 81 - unknown routes return JSON 404
+      ---
+      duration_ms: 2.2299
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.711Z POST /api/notes
+# 2026-11-09T17:46:06.714Z POST /api/notes
+# 2026-11-09T17:46:06.717Z POST /api/notes
+# 2026-11-09T17:46:06.721Z GET /api/notes
+# 2026-11-09T17:46:06.724Z GET /api/notes
+# 2026-11-09T17:46:06.727Z GET /api/notes
+# 2026-11-09T17:46:06.729Z GET /api/notes
+    # Subtest: search is case-insensitive literal title matching; sort and limit work
+    ok 82 - search is case-insensitive literal title matching; sort and limit work
+      ---
+      duration_ms: 22.747
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.734Z GET /api/notes
+    # Subtest: invalid query sort=wrong returns 400
+    ok 83 - invalid query sort=wrong returns 400
+      ---
+      duration_ms: 3.1311
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.737Z GET /api/notes
+    # Subtest: invalid query limit=0 returns 400
+    ok 84 - invalid query limit=0 returns 400
+      ---
+      duration_ms: 2.3115
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.739Z GET /api/notes
+    # Subtest: invalid query limit=-1 returns 400
+    ok 85 - invalid query limit=-1 returns 400
+      ---
+      duration_ms: 2.0285
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.741Z GET /api/notes
+    # Subtest: invalid query limit=1.5 returns 400
+    ok 86 - invalid query limit=1.5 returns 400
+      ---
+      duration_ms: 2.0529
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.743Z GET /api/notes
+    # Subtest: invalid query limit=101 returns 400
+    ok 87 - invalid query limit=101 returns 400
+      ---
+      duration_ms: 2.2175
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.745Z GET /api/notes
+    # Subtest: invalid query limit=abc returns 400
+    ok 88 - invalid query limit=abc returns 400
+      ---
+      duration_ms: 2.1247
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.748Z GET /api/notes
+    # Subtest: invalid query search=a&search=b returns 400
+    ok 89 - invalid query search=a&search=b returns 400
+      ---
+      duration_ms: 2.294
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.750Z GET /api/notes
+    # Subtest: invalid query sort=newest&sort=oldest returns 400
+    ok 90 - invalid query sort=newest&sort=oldest returns 400
+      ---
+      duration_ms: 2.513
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.753Z GET /api/notes
+    # Subtest: invalid query limit=1&limit=2 returns 400
+    ok 91 - invalid query limit=1&limit=2 returns 400
+      ---
+      duration_ms: 2.6354
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.755Z GET /api/notes
+    # Subtest: invalid query unknown=value returns 400
+    ok 92 - invalid query unknown=value returns 400
+      ---
+      duration_ms: 2.1646
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.757Z GET /api/notes
+    # Subtest: invalid query search=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa returns 400
+    ok 93 - invalid query search=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa returns 400
+      ---
+      duration_ms: 2.0377
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.760Z GET /api/notes
+# 2026-11-09T17:46:06.762Z OPTIONS /api/notes
+    # Subtest: the configured frontend origin receives CORS headers
+    ok 94 - the configured frontend origin receives CORS headers
+      ---
+      duration_ms: 5.1464
+      type: 'test'
+      ...
+# 2026-11-09T17:46:06.765Z POST /api/notes
+# 2026-11-09T17:46:07.743Z GET /api/notes/6af206decb659d61a79fe6b5
+    # Subtest: notes survive closing the API, restarting MongoDB, and reconnecting
+    ok 95 - notes survive closing the API, restarting MongoDB, and reconnecting
+      ---
+      duration_ms: 986.775
+      type: 'test'
+      ...
+# 2026-11-09T17:46:07.769Z GET /api/notes
+# Request failed: MongoNotConnectedError
+# 2026-11-09T17:46:07.775Z GET /api/notes
+    # Subtest: a real database outage returns safe JSON 500 and requests recover after reconnecting
+    ok 96 - a real database outage returns safe JSON 500 and requests recover after reconnecting
+      ---
+      duration_ms: 29.3082
+      type: 'test'
+      ...
+    1..96
+ok 1 - Notes API against real, disk-backed MongoDB
+  ---
+  duration_ms: 2595.0935
+  type: 'suite'
+  ...
+# Subtest: startup explains a missing MONGODB_URI and exits cleanly
+ok 2 - startup explains a missing MONGODB_URI and exits cleanly
+  ---
+  duration_ms: 555.0955
+  type: 'test'
+  ...
+# Subtest: startup rejects an invalid port before listening
+ok 3 - startup rejects an invalid port before listening
+  ---
+  duration_ms: 537.655
+  type: 'test'
+  ...
+# Subtest: an unavailable database causes a clear startup error with no secret URI
+ok 4 - an unavailable database causes a clear startup error with no secret URI
+  ---
+  duration_ms: 5578.1829
+  type: 'test'
+  ...
+1..4
+# tests 99
+# suites 1
+# pass 99
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 10159.2471

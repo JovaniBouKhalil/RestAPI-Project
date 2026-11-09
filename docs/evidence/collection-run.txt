@@ -1,0 +1,27 @@
+Assignment 6 Postman collection: real disk-backed MongoDB
+Node v24.14.0; MongoDB 8.2.6; 2026-11-09T17:46:05.834Z
+PASS GET / -> 200 | 01 - API entry point
+PASS GET /api/notes -> 200 | 02 - List notes
+PASS POST /api/notes -> 201 | 03 - Create a note and save noteId
+PASS GET /api/notes/6af206ddcb9180bd5936cf03 -> 200 | 04 - Get the created note
+PASS GET /api/notes?search=REST&sort=newest&limit=10 -> 200 | 05 - Search, sort, and limit
+PASS PUT /api/notes/6af206ddcb9180bd5936cf03 -> 200 | 06 - Replace a note with PUT
+PASS PATCH /api/notes/6af206ddcb9180bd5936cf03 -> 200 | 07 - Update only body with PATCH
+PASS GET /api/notes/6af206ddcb9180bd5936cf03 -> 200 | 08 - Read the updated note
+PASS POST /api/notes -> 400 | 09 - Reject missing title on create
+PASS PUT /api/notes/6af206ddcb9180bd5936cf03 -> 400 | 10 - Reject missing title on PUT
+PASS PATCH /api/notes/6af206ddcb9180bd5936cf03 -> 400 | 11 - Reject invalid tags on PATCH
+PASS POST /api/notes -> 400 | 12 - Reject malformed JSON
+PASS GET /api/notes/not-an-id -> 400 | 13 - Reject a malformed ObjectId
+PASS GET /api/notes/000000000000000000000001 -> 404 | 14 - Missing note on GET
+PASS PUT /api/notes/000000000000000000000001 -> 404 | 15 - Missing note on PUT
+PASS PATCH /api/notes/000000000000000000000001 -> 404 | 16 - Missing note on PATCH
+PASS DELETE /api/notes/000000000000000000000001 -> 404 | 17 - Missing note on DELETE
+PASS GET /api/notes?limit=0 -> 400 | 18 - Reject invalid query
+PASS GET /api/unknown -> 404 | 19 - Unknown route
+PASS POST /api/notes -> 415 | 20 - Reject non-JSON content type
+PASS DELETE /api/notes/6af206ddcb9180bd5936cf03 -> 204 | 21 - Delete the created note
+PASS GET /api/notes/6af206ddcb9180bd5936cf03 -> 404 | 22 - Deleted note is missing
+PASS DELETE /api/notes/6af206ddcb9180bd5936cf03 -> 404 | 23 - Repeated delete returns 404
+PASS GET /api/notes -> 200 | 24 - Final list excludes the deleted note
+24 requests passed; 71 assertions passed; 0 failures.
