@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { MongoMemoryServer } from 'mongodb-memory-server-core';
@@ -9,7 +10,7 @@ await mkdir(dbPath, { recursive: true });
 try {
   const mongo = await MongoMemoryServer.create({
     binary: { version: '8.2.6' },
-    instance: { port: 27017, ip: '127.0.0.1', dbPath, storageEngine: 'wiredTiger' },
+    instance: { port: 27017, portGeneration: false, ip: '127.0.0.1', dbPath, storageEngine: 'wiredTiger' },
   });
   console.log('MongoDB is ready at mongodb://127.0.0.1:27017');
   console.log(`Data is saved in ${dbPath}`);

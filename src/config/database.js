@@ -8,5 +8,6 @@ export async function connectDatabase(uri) {
     serverSelectionTimeoutMS: 5000,
     connectTimeoutMS: 5000,
     socketTimeoutMS: 10000,
+    writeConcern: { w: 'majority', j: true },
   });
 }
