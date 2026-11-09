@@ -1,0 +1,19 @@
+Assignment 6 clean submission check
+Checked on 2026-11-09 using Node v24.14.0, npm 11.9.0, and MongoDB 8.2.6.
+Source snapshot: 5f6e231 (application code is unchanged by this evidence report).
+
+PASS Created the ZIP using npm run package from a clean Git working tree.
+PASS Verified the ZIP can be read and its file checksums are valid.
+PASS Verified node_modules, .env, .git, database files, and nested ZIPs are absent.
+PASS Verified every relative Markdown documentation link resolves.
+PASS Extracted the ZIP into a new temporary folder outside the working repository.
+PASS Ran npm ci: 124 packages installed, 0 audit vulnerabilities.
+PASS Ran npm test against a real MongoDB process: 99 tests, 99 passed, 0 failed.
+PASS Ran npm run test:collection: 24 requests and 71 assertions passed, 0 failures.
+PASS Copied .env.example to .env and started npm run dev on port 3001.
+PASS Ran docs/demo.ps1 against that server: create, list, get one, PUT, PATCH, DELETE.
+PASS The demo removed only its own note; successful DELETE returned no body.
+
+An existing, locally verified MongoDB executable was supplied through
+MONGOMS_SYSTEM_BINARY for the isolated automated tests. This avoids downloading
+the same binary again and does not replace or mock the database.

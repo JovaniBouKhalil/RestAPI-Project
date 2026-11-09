@@ -379,6 +379,7 @@ restarting both servers, and a handled database failure followed by recovery.
 - [Automated test transcript](docs/evidence/automated-tests.txt)
 - [Collection transcript](docs/evidence/collection-run.txt)
 - [Full process restart check](docs/evidence/process-restart.txt)
+- [Fresh ZIP installation check](docs/evidence/submission-check.txt)
 - [Rubric checklist and chapter mapping](docs/COURSE_ALIGNMENT.md)
 
 To refresh the evidence, run `npm run test:evidence` and
