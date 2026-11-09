@@ -3,13 +3,13 @@
 This project implements **Assignment 6: REST API Project**, using the supplied
 course chapters. Notes are the single primary resource.
 
-| Rubric criterion | Points | Planned evidence |
+| Rubric criterion | Points | Implementation and evidence |
 | --- | ---: | --- |
-| CRUD completeness and correctness | 30 | GET list, GET one, POST, PUT, DELETE; also PATCH |
-| RESTful design and status codes | 20 | Plural resource URLs, JSON, 200/201/204/400/404/500 |
-| Database integration | 20 | MongoDB documents through Mongoose; restart persistence check |
-| Error handling and validation | 15 | Field validation, invalid IDs, missing records, malformed JSON, handled database errors |
-| Documentation | 15 | Setup, every route with examples, collection, recorded test evidence |
+| CRUD completeness and correctness | 30 | [Routes](../src/routes/notes.js): GET list, GET one, POST, PUT, DELETE; also PATCH |
+| RESTful design and status codes | 20 | [README](../README.md): plural resource URLs, JSON, 200/201/204/400/404/500 |
+| Database integration | 20 | [Schema](../src/models/Note.js), [connection](../src/config/database.js), and a test that restarts both API and MongoDB |
+| Error handling and validation | 15 | [Validation](../src/middleware/validateNote.js), [errors](../src/middleware/errors.js), and [99 passing tests](evidence/automated-tests.txt) |
+| Documentation | 15 | [README](../README.md), [Postman collection](../postman/Notes_API.postman_collection.json), and [collection evidence](evidence/collection-run.txt) |
 
 ## Methods used from the chapters
 
@@ -25,6 +25,10 @@ course chapters. Notes are the single primary resource.
   dotenv, timestamps, async/await, connect before listen, find(), findById(),
   create(), findByIdAndUpdate() with new and runValidators, and
   findByIdAndDelete().
+
+The connection also requests journaled writes so acknowledged changes survive
+an abrupt database process stop. API error middleware returns a generic 500
+for unexpected failures; it does not expose database credentials or a stack.
 
 Chapters 13-15 cover React. Chapters 19-20 add authentication and full-stack
 integration. Those features belong to later work and are not required by this

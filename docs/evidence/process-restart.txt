@@ -1,0 +1,7 @@
+Manual full-process persistence check
+Node v24.14.0; MongoDB 8.2.6; 2026-11-09T17:47:26.195Z
+PASS Started npm run db using data/mongodb and npm run dev using .env.
+PASS Created a note through POST /api/notes (201).
+PASS Stopped both API and MongoDB processes, then restarted npm run db and npm start.
+PASS GET of the same note returned 200 with identical fields, ID, and timestamps.
+PASS Deleted only the verification note (204), then verified GET returns 404.
